@@ -1,0 +1,12 @@
+/.env.development
+/.env.production
+/.env
+/.env.dev
+/.env.prod
+/.serverless
+/.vscode
+/.webpack
+/node_modules
+/tmp
+/.localstack
+.nvmrc
