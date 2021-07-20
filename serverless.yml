@@ -31,3 +31,4 @@ custom:
 
   serverless-offline:
     useChildProcesses: true
+    httpPort: 4000

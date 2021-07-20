@@ -1,6 +1,5 @@
 import mongoose, { HookNextFunction } from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
-import { IBook } from "./book";
 import * as bcrypt from "bcryptjs";
 
 export interface IUser extends mongoose.Document {
@@ -10,7 +9,6 @@ export interface IUser extends mongoose.Document {
   username: string;
   dateOfBirth?: Date;
   password: string;
-  booksAdded: IBook[];
   isPasswordCorrect(password: string): Promise<boolean>;
 }
 
@@ -33,12 +31,6 @@ const schema: mongoose.SchemaDefinition = {
     required: true,
   },
   dateOfBirth: { type: mongoose.Schema.Types.Date, required: false },
-  booksAdded: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Book",
-    },
-  ],
 };
 
 const UserSchema: mongoose.Schema = new mongoose.Schema(schema);

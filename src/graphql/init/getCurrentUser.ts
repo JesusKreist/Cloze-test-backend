@@ -19,6 +19,7 @@ export const getCurrentUser = async (
     authorizationKey.toLowerCase().startsWith("bearer ")
   ) {
     const authToken = authorizationKey.substring(7);
+
     try {
       verifiedToken = jwt.verify(authToken, config.JWT_SECRET) as any;
     } catch (error) {
@@ -28,6 +29,7 @@ export const getCurrentUser = async (
 
   if (verifiedToken) {
     decodedToken = verifiedToken as TokenUserObject;
+    logger.info("Successfully decoded the token", verifiedToken);
 
     try {
       await User.findById(decodedToken.id);

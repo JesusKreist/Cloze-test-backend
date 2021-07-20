@@ -24,7 +24,6 @@ export const user = gql`
     username: String!
     dateOfBirth: Date
     password: String!
-    booksAdded: [Book]!
   }
 
   type Token {

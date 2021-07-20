@@ -3,7 +3,6 @@ import {
   AuthenticationError,
   UserInputError,
 } from "apollo-server-lambda";
-import { BookModel } from "../../database/models/book";
 import { IUser, UserModel } from "../../database/models/user";
 import { ResolverContext } from "../server";
 import * as jwt from "jsonwebtoken";
@@ -51,7 +50,6 @@ export const userResolver = {
       { mongooseConnection }: ResolverContext
     ) => {
       const User = UserModel(mongooseConnection);
-      const Book = BookModel(mongooseConnection);
 
       const newUser: Partial<IUser> = {
         username,
@@ -63,7 +61,7 @@ export const userResolver = {
 
       try {
         const newlyCreatedUser = await User.create(newUser);
-        return newlyCreatedUser.populate({ path: "booksAdded", model: Book });
+        return newlyCreatedUser;
       } catch (error) {
         throw new UserInputError(error.message, { invalidArgs: newUser });
       }

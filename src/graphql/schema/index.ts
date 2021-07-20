@@ -1,9 +1,8 @@
 import { gql } from "apollo-server-lambda";
-import { book } from "./book";
-import { author } from "./author";
 import { customScalars } from "./custom";
 import { user } from "./user";
 import { s3Upload } from "./s3upload";
+import { quiz } from "./quiz";
 
 const defaultSchema = gql`
   type Query {
@@ -15,11 +14,4 @@ const defaultSchema = gql`
   }
 `;
 
-export const typeDefs = [
-  defaultSchema,
-  customScalars,
-  author,
-  book,
-  user,
-  s3Upload,
-];
+export const typeDefs = [defaultSchema, customScalars, user, s3Upload, quiz];
