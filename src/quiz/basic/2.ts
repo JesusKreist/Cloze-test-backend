@@ -544,7 +544,7 @@ const question: QuizQuestion = {
   title: "Öffnungs-Pläne für die Kultur",
   intro: "In der Corona-Pandemie finden keine Kultur-Veranstaltungen statt.",
   rank: "basic",
-  id: 2,
+  id: "2",
 };
 
 export default question;

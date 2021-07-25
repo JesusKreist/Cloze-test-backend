@@ -925,7 +925,7 @@ const question: QuizQuestion = {
   title: "Salz nach Belieben",
   intro: "Weder Ungesalzenes noch Versalzenes schmeckt:",
   rank: "advanced",
-  id: 2,
+  id: "2",
 };
 
 export default question;

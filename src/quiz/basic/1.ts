@@ -541,7 +541,7 @@ const question: QuizQuestion = {
   title: "Corona-Krise",
   intro: "Seit Anfang 2020 gibt es weltweit ein neues ansteckendes Virus:",
   rank: "basic",
-  id: 1,
+  id: "1",
 };
 
 export default question;

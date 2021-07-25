@@ -1450,7 +1450,7 @@ const question: QuizQuestion = {
   title: "Keine Panik!",
   intro: "Angst und Panik.",
   rank: "advanced",
-  id: 1,
+  id: "1",
 };
 
 export default question;

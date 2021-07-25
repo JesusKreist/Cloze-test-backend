@@ -500,7 +500,7 @@ const question: QuizQuestion = {
   intro:
     "Die neue US-Regierung hat eine politische Kehrtwende im Kampf gegen die Erderwärmung versprochen.",
   rank: "intermediate",
-  id: 1,
+  id: "1",
 };
 
 export default question;

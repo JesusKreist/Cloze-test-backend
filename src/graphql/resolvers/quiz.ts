@@ -15,7 +15,7 @@ export const quizResolver = {
         answer,
         testRank,
         testId,
-      }: { answer: string; testRank: string; testId: number }
+      }: { answer: string; testRank: string; testId: string }
     ): string => {
       const solvedQuiz = allClozeTests.find(
         (quiz) => quiz.id === testId && quiz.rank === testRank
@@ -61,7 +61,7 @@ export const quizResolver = {
   Query: {
     getOneClozeTest: (
       _root: any,
-      { testRank, testId }: { testRank: string; testId: number }
+      { testRank, testId }: { testRank: string; testId: string }
     ): string => {
       const foundQuiz = allClozeTests.find(
         (quiz) => quiz.id === testId && quiz.rank === testRank

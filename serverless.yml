@@ -31,4 +31,5 @@ custom:
 
   serverless-offline:
     useChildProcesses: true
+    host: 192.168.8.139
     httpPort: 4000
