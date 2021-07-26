@@ -15,3 +15,5 @@ const defaultSchema = gql`
 `;
 
 export const typeDefs = [defaultSchema, customScalars, user, s3Upload, quiz];
+
+// export const typeDefs = [defaultSchema, customScalars, user, s3Upload];

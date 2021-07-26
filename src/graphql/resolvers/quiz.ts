@@ -1,4 +1,5 @@
 import { ApolloError, UserInputError } from "apollo-server-lambda";
+import { Quiz } from "../../database/models/quiz";
 import {
   allClozeTests,
   AnswerGrading,
@@ -6,6 +7,8 @@ import {
   UserAnswer,
 } from "../../quiz";
 import { logger } from "../../utils/logger";
+import { ResolverContext } from "../server";
+import { QuizModel } from "../../database/models/quiz";
 
 export const quizResolver = {
   Mutation: {
@@ -56,6 +59,27 @@ export const quizResolver = {
       });
 
       return JSON.stringify(markedSolution);
+    },
+    addOneQuiz: async (
+      _root: any,
+      { text, title, rank }: Quiz,
+      { mongooseConnection }: ResolverContext
+    ) => {
+      // todo protect this route with admin administration
+      const QuizModelConnection = QuizModel(mongooseConnection);
+
+      const newQuiz = {
+        text,
+        title,
+        rank,
+      };
+
+      try {
+        const newlyCreatedQuiz = await QuizModelConnection.create(newQuiz);
+        return newlyCreatedQuiz;
+      } catch (error) {
+        throw new UserInputError(error.message, { invalidArgs: newQuiz });
+      }
     },
   },
   Query: {
