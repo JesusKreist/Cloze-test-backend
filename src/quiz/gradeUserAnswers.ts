@@ -56,6 +56,8 @@ export const gradeUserAnswer = async (
     throw new Error(`Could not find quiz with id ${quizId}`);
   }
 
+  const wordsSolvedByUser: { [x: number]: boolean } = {};
+
   const gradedUserAnswers = userAnswers.map((userAnswer) => {
     const matchingSplitWord = findCurrentSolvedWord(
       solvedQuiz.createdQuiz,
@@ -66,6 +68,8 @@ export const gradeUserAnswer = async (
       throw new Error("Couldn't find a matching solved word in quiz");
     }
 
+    wordsSolvedByUser[userAnswer.indexOfWord] = true;
+
     return {
       indexOfWord: matchingSplitWord.indexOfWord,
       isCorrect: matchingSplitWord.answers.includes(userAnswer.answer),
@@ -75,5 +79,29 @@ export const gradeUserAnswer = async (
     };
   });
 
-  return gradedUserAnswers;
+  const gradedWordsNotSolved = solvedQuiz.createdQuiz
+    .filter((processedWord) => {
+      const indexOfProcessedWord = processedWord.indexOfWord;
+      if (
+        !wordsSolvedByUser[indexOfProcessedWord] &&
+        processedWord.wordType === "split"
+      ) {
+        return true;
+      }
+
+      return false;
+    })
+    .map((processedWord) => {
+      return {
+        indexOfWord: processedWord.indexOfWord,
+        isCorrect: false,
+        correctAnswer: processedWord.answers[0],
+        fullWord: processedWord.fullWord,
+        userAnswer: "userDidNotAnswer",
+      };
+    });
+
+  // console.table(gradedWordsNotSolved);
+
+  return [...gradedUserAnswers, ...gradedWordsNotSolved];
 };
