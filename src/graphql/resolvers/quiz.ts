@@ -9,6 +9,10 @@ import {
 import { logger } from "../../utils/logger";
 import { ResolverContext } from "../server";
 import { QuizModel } from "../../database/models/quiz";
+import {
+  gradeUserAnswer,
+  UserAnswerRequest,
+} from "../../quiz/gradeUserAnswers";
 
 export const quizResolver = {
   Mutation: {
@@ -68,11 +72,7 @@ export const quizResolver = {
       // todo protect this route with admin administration
       const QuizModelConnection = QuizModel(mongooseConnection);
 
-      const newQuiz = {
-        text,
-        title,
-        rank,
-      };
+      const newQuiz = { text, title, rank };
 
       try {
         const newlyCreatedQuiz = await QuizModelConnection.create(newQuiz);
@@ -80,6 +80,18 @@ export const quizResolver = {
       } catch (error) {
         throw new UserInputError(error.message, { invalidArgs: newQuiz });
       }
+    },
+    checkUserAnswers: async (
+      _root: any,
+      { quizId, userAnswers }: UserAnswerRequest,
+      { mongooseConnection }: ResolverContext
+    ) => {
+      const answers = await gradeUserAnswer(
+        { quizId, userAnswers },
+        mongooseConnection
+      );
+      console.table(answers);
+      return answers;
     },
   },
   Query: {

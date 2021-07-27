@@ -10,3 +10,5 @@
 /tmp
 /.localstack
 .nvmrc
+
+node_modules
