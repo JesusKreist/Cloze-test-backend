@@ -66,13 +66,13 @@ export const quizResolver = {
     },
     addOneQuiz: async (
       _root: any,
-      { text, title, rank }: Quiz,
+      { text, title }: Quiz,
       { mongooseConnection }: ResolverContext
     ) => {
       // todo protect this route with admin administration
       const QuizModelConnection = QuizModel(mongooseConnection);
 
-      const newQuiz = { text, title, rank };
+      const newQuiz = { text, title };
 
       try {
         const newlyCreatedQuiz = await QuizModelConnection.create(newQuiz);

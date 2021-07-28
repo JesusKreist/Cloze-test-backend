@@ -2,7 +2,6 @@ import mongoose, { HookNextFunction } from "mongoose";
 import { createQuiz, ProcessedWord } from "../../quiz/createQuiz";
 
 export interface Quiz extends mongoose.Document {
-  rank: string;
   title: string;
   text: string;
   createdQuiz: ProcessedWord[];
@@ -10,11 +9,6 @@ export interface Quiz extends mongoose.Document {
 }
 
 const schema: mongoose.SchemaDefinition = {
-  rank: {
-    type: mongoose.Schema.Types.String,
-    unique: true,
-    required: true,
-  },
   title: {
     type: mongoose.Schema.Types.String,
     required: true,

@@ -8,7 +8,7 @@ export const quiz = gql`
 
   extend type Mutation {
     checkAnswer(answer: String, testRank: String!, testId: String!): String!
-    addOneQuiz(rank: String!, title: String!, text: String!): Quiz!
+    addOneQuiz(title: String!, text: String!): Quiz!
     checkUserAnswers(
       quizId: String!
       userAnswers: [UserAnswer]
@@ -29,7 +29,6 @@ export const quiz = gql`
   type Quiz {
     id: ID!
     title: String!
-    rank: String!
     text: String!
     createdQuiz: [ProcessedWord]!
   }
