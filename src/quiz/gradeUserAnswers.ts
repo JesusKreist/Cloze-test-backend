@@ -1,3 +1,4 @@
+import { ApolloError } from "apollo-server-lambda";
 import mongoose from "mongoose";
 import { QuizModel } from "../database/models/quiz";
 import { ProcessedWord } from "./createQuiz";
@@ -51,7 +52,7 @@ export const gradeUserAnswer = async (
 
     if (!matchingSplitWord) {
       console.log(userAnswer);
-      throw new Error("Couldn't find a matching solved word in quiz");
+      throw new ApolloError("Couldn't find a matching solved word in quiz");
     }
     wordsSolvedByUser[userAnswer.indexOfWord] = true;
 

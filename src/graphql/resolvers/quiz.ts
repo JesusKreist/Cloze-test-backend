@@ -86,12 +86,7 @@ export const quizResolver = {
       { quizId, userAnswers }: UserAnswerRequest,
       { mongooseConnection }: ResolverContext
     ) => {
-      const answers = await gradeUserAnswer(
-        { quizId, userAnswers },
-        mongooseConnection
-      );
-      console.table(answers);
-      return answers;
+      return gradeUserAnswer({ quizId, userAnswers }, mongooseConnection);
     },
   },
   Query: {
