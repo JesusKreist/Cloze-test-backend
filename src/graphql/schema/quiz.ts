@@ -11,7 +11,7 @@ export const quiz = gql`
     addOneQuiz(title: String!, text: String!): Quiz!
     checkUserAnswers(
       quizId: String!
-      userAnswers: [UserAnswer]
+      userAnswers: [UserAnswer]!
     ): [ServerAnswer]!
   }
 

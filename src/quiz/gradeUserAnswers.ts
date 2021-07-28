@@ -21,17 +21,17 @@ export interface UserAnswerRequest {
   quizId: string;
 }
 
+export interface UserAnswerRequestParams {
+  quizId: string;
+  userAnswers: UserAnswer[];
+}
+
 const findCurrentSolvedWord = (
   solvedQuiz: ProcessedWord[],
   userAnswer: UserAnswer
 ) => {
   return solvedQuiz.find((word) => word.indexOfWord === userAnswer.indexOfWord);
 };
-
-export interface UserAnswerRequestParams {
-  quizId: string;
-  userAnswers: UserAnswer[];
-}
 
 export const gradeUserAnswer = async (
   { quizId, userAnswers }: UserAnswerRequestParams,
