@@ -94,7 +94,7 @@ const getProcessedWords = (splitParagraph: string[]): ProcessedWord[] => {
 
       formattedWordObj.returnedWord = firstPartOfWord;
       formattedWordObj.answers = [secondPartOfWord];
-      formattedWordObj.lineLength = secondPartOfWord.length + 1;
+      formattedWordObj.lineLength = firstPartOfWord.length + 1;
     } else {
       formattedWordObj.answers = [""];
       formattedWordObj.lineLength = 0;
