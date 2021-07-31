@@ -87,5 +87,14 @@ export const gradeUserAnswer = async (
       };
     });
 
-  return [...gradedUserAnswers, ...gradedWordsNotSolved];
+  const gradedAnswers = [...gradedUserAnswers, ...gradedWordsNotSolved];
+  const numOfCorrect = gradedAnswers.filter(
+    (gradedAnswer) => gradedAnswer.isCorrect
+  ).length;
+  const numOfIncorrect = gradedAnswers.length - numOfCorrect;
+  const percentageCorrect = Math.floor(
+    (numOfCorrect / gradedAnswers.length) * 100
+  );
+
+  return { gradedAnswers, numOfCorrect, numOfIncorrect, percentageCorrect };
 };

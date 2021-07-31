@@ -9,10 +9,7 @@ export const quiz = gql`
   extend type Mutation {
     checkAnswer(answer: String, testRank: String!, testId: String!): String!
     addOneQuiz(title: String!, text: String!): Quiz!
-    checkUserAnswers(
-      quizId: String!
-      userAnswers: [UserAnswer]!
-    ): [ServerAnswer]!
+    checkUserAnswers(quizId: String!, userAnswers: [UserAnswer]!): ServerAnswer!
   }
 
   type ProcessedWord {
@@ -33,12 +30,19 @@ export const quiz = gql`
     createdQuiz: [ProcessedWord]!
   }
 
-  type ServerAnswer {
+  type GradedAnswer {
     indexOfWord: Int!
     isCorrect: Boolean!
     correctAnswer: String!
     fullWord: String!
     userAnswer: String!
+  }
+
+  type ServerAnswer {
+    gradedAnswers: [GradedAnswer]!
+    numOfCorrect: Int!
+    numOfIncorrect: Int!
+    percentageCorrect: Int!
   }
 
   input UserAnswer {
