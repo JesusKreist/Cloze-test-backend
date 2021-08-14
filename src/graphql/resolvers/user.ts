@@ -19,16 +19,22 @@ export const userResolver = {
   Mutation: {
     login: async (
       _root: any,
-      { username, password }: IUser,
+      { username, password, emailAddress }: IUser,
       { mongooseConnection }: ResolverContext
     ) => {
       const User = UserModel(mongooseConnection);
 
-      const enteredUser = await User.findOne({ username });
+      if (!username && !emailAddress) {
+        return new UserInputError("Please enter a username or email address.");
+      }
+
+      const enteredUser =
+        (await User.findOne({ username })) ||
+        (await User.findOne({ emailAddress }));
       const passwordIsCorrect = await enteredUser?.isPasswordCorrect(password);
 
       if (!enteredUser || !passwordIsCorrect) {
-        return new AuthenticationError("Username or password incorrect!!");
+        return new AuthenticationError("Username or password incorrect!");
       }
 
       const loggedInUser: TokenUserObject = {

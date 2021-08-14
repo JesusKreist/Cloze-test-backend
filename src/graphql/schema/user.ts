@@ -14,7 +14,11 @@ export const user = gql`
       emailAddress: EmailAddress!
       dateOfBirth: Date
     ): User
-    login(username: String!, password: String!): Token
+    login(
+      username: String
+      emailAddress: EmailAddress
+      password: String!
+    ): Token
     updatePassword(oldPassword: String!, newPassword: String!): User
   }
 
