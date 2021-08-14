@@ -9,6 +9,7 @@ export interface IUser extends mongoose.Document {
   username: string;
   dateOfBirth?: Date;
   password: string;
+  emailAddress: string;
   isPasswordCorrect(password: string): Promise<boolean>;
 }
 
@@ -31,6 +32,10 @@ const schema: mongoose.SchemaDefinition = {
     required: true,
   },
   dateOfBirth: { type: mongoose.Schema.Types.Date, required: false },
+  emailAddress: {
+    type: mongoose.Schema.Types.String,
+    required: true,
+  },
 };
 
 const UserSchema: mongoose.Schema = new mongoose.Schema(schema);

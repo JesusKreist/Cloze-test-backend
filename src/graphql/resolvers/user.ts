@@ -46,7 +46,14 @@ export const userResolver = {
     },
     createUser: async (
       _root: any,
-      { username, password, firstName, lastName, dateOfBirth }: IUser,
+      {
+        username,
+        password,
+        firstName,
+        lastName,
+        dateOfBirth,
+        emailAddress,
+      }: IUser,
       { mongooseConnection }: ResolverContext
     ) => {
       const User = UserModel(mongooseConnection);
@@ -57,6 +64,7 @@ export const userResolver = {
         lastName,
         dateOfBirth,
         password,
+        emailAddress,
       };
 
       try {
