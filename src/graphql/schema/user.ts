@@ -11,6 +11,7 @@ export const user = gql`
       password: String!
       firstName: String!
       lastName: String!
+
       dateOfBirth: Date
     ): User
     login(username: String!, password: String!): Token
