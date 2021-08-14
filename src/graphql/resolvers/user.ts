@@ -22,15 +22,14 @@ export const userResolver = {
       { username, password, emailAddress }: IUser,
       { mongooseConnection }: ResolverContext
     ) => {
-      const User = UserModel(mongooseConnection);
-
       if (!username && !emailAddress) {
         return new UserInputError("Please enter a username or email address.");
       }
 
+      const UserDatabase = UserModel(mongooseConnection);
       const enteredUser =
-        (await User.findOne({ username })) ||
-        (await User.findOne({ emailAddress }));
+        (await UserDatabase.findOne({ username })) ||
+        (await UserDatabase.findOne({ emailAddress }));
       const passwordIsCorrect = await enteredUser?.isPasswordCorrect(password);
 
       if (!enteredUser || !passwordIsCorrect) {
