@@ -9,8 +9,7 @@ export const user = gql`
     createUser(
       username: String!
       password: String!
-      firstName: String!
-      lastName: String!
+      fullName: String!
       emailAddress: EmailAddress!
       dateOfBirth: Date
     ): User
@@ -24,8 +23,7 @@ export const user = gql`
 
   type User {
     id: ID!
-    firstName: String!
-    lastName: String!
+    fullName: String!
     username: String!
     dateOfBirth: Date
     password: String!

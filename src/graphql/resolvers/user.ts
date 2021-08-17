@@ -11,8 +11,7 @@ import config from "../../utils/config";
 export interface TokenUserObject {
   username: string;
   id: string;
-  firstName: string;
-  lastName: string;
+  fullName: string;
 }
 
 export const userResolver = {
@@ -39,8 +38,7 @@ export const userResolver = {
       const loggedInUser: TokenUserObject = {
         username,
         id: enteredUser._id,
-        firstName: enteredUser.firstName,
-        lastName: enteredUser.lastName,
+        fullName: enteredUser.fullName,
       };
 
       const jwtToken = jwt.sign(loggedInUser, config.JWT_SECRET, {
@@ -51,22 +49,14 @@ export const userResolver = {
     },
     createUser: async (
       _root: any,
-      {
-        username,
-        password,
-        firstName,
-        lastName,
-        dateOfBirth,
-        emailAddress,
-      }: IUser,
+      { username, password, fullName, dateOfBirth, emailAddress }: IUser,
       { mongooseConnection }: ResolverContext
     ) => {
       const User = UserModel(mongooseConnection);
 
       const newUser: Partial<IUser> = {
         username,
-        firstName,
-        lastName,
+        fullName,
         dateOfBirth,
         password,
         emailAddress,

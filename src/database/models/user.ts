@@ -4,8 +4,7 @@ import * as bcrypt from "bcryptjs";
 
 export interface IUser extends mongoose.Document {
   id: string;
-  firstName: string;
-  lastName: string;
+  fullName: string;
   username: string;
   dateOfBirth?: Date;
   password: string;
@@ -19,11 +18,7 @@ const schema: mongoose.SchemaDefinition = {
     unique: true,
     required: true,
   },
-  firstName: {
-    type: mongoose.Schema.Types.String,
-    required: true,
-  },
-  lastName: {
+  fullName: {
     type: mongoose.Schema.Types.String,
     required: true,
   },
