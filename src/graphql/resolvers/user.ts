@@ -14,10 +14,7 @@ export interface TokenUserObject {
   fullName: string;
 }
 
-type NewUser = Pick<
-  IUser,
-  "username" | "password" | "emailAddress" | "fullName" | "dateOfBirth"
->;
+type NewUser = Omit<IUser, "id" | "isPasswordCorrect">;
 
 export const userResolver = {
   Mutation: {
@@ -59,16 +56,15 @@ export const userResolver = {
     ) => {
       const User = UserModel(mongooseConnection);
 
-      const userWithSameEmail = await User.findOne({
-        emailAddressInLowerCase: emailAddress.toLowerCase(),
-      });
+      const emailAddressInLowerCase = emailAddress.toLowerCase();
+      const usernameInLowerCase = username.toLowerCase();
+
+      const userWithSameEmail = await User.findOne({ emailAddressInLowerCase });
       if (userWithSameEmail) {
         return new ApolloError("Email already exists.");
       }
 
-      const userWithSameUsername = await User.findOne({
-        usernameInLowerCase: username.toLowerCase(),
-      });
+      const userWithSameUsername = await User.findOne({ usernameInLowerCase });
       if (userWithSameUsername) {
         return new ApolloError("Username already taken.");
       }
@@ -79,6 +75,8 @@ export const userResolver = {
         password,
         emailAddress,
         dateOfBirth,
+        emailAddressInLowerCase,
+        usernameInLowerCase,
       };
 
       try {

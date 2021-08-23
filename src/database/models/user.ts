@@ -43,27 +43,23 @@ const schema: mongoose.SchemaDefinition = {
   },
   emailAddressInLowerCase: {
     type: mongoose.Schema.Types.String,
-    required: true,
     unique: true,
+    required: true,
   },
 };
 
 const UserSchema = new mongoose.Schema(schema);
 
-UserSchema.pre("save", async function (next: HookNextFunction) {
-  const thisObj = this as IUserDocument;
-
+UserSchema.pre<IUserDocument>("save", async function (next: HookNextFunction) {
   if (this.isModified("password")) {
     try {
       const saltRounds = 12;
-      thisObj.password = await bcrypt.hash(thisObj.password, saltRounds);
+      this.password = await bcrypt.hash(this.password, saltRounds);
       return next();
     } catch (e) {
       return next(e);
     }
   }
-
-  return next();
 });
 
 UserSchema.methods.isPasswordCorrect = async function (password: string) {

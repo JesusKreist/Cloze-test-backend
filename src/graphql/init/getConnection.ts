@@ -3,7 +3,7 @@ import { logger } from "../../utils/logger";
 import config from "../../utils/config";
 import mongoose from "mongoose";
 
-mongoose.set("debug", true);
+// mongoose.set("debug", true);
 let cachedDatabaseConnection: mongoose.Connection | null = null;
 
 export const getConnection = async (): Promise<mongoose.Connection> => {
