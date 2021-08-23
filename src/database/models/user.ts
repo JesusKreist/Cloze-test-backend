@@ -2,18 +2,27 @@ import mongoose, { HookNextFunction } from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
 import * as bcrypt from "bcryptjs";
 
-export interface IUser extends mongoose.Document {
+export interface IUser {
   id: string;
   fullName: string;
   username: string;
+  usernameInLowerCase: string;
   dateOfBirth?: Date;
   password: string;
   emailAddress: string;
+  emailAddressInLowerCase: string;
   isPasswordCorrect(password: string): Promise<boolean>;
 }
 
+type IUserDocument = mongoose.Document & IUser;
+
 const schema: mongoose.SchemaDefinition = {
   username: {
+    type: mongoose.Schema.Types.String,
+    unique: true,
+    required: true,
+  },
+  usernameInLowerCase: {
     type: mongoose.Schema.Types.String,
     unique: true,
     required: true,
@@ -30,13 +39,19 @@ const schema: mongoose.SchemaDefinition = {
   emailAddress: {
     type: mongoose.Schema.Types.String,
     required: true,
+    unique: true,
+  },
+  emailAddressInLowerCase: {
+    type: mongoose.Schema.Types.String,
+    required: true,
+    unique: true,
   },
 };
 
-const UserSchema: mongoose.Schema = new mongoose.Schema(schema);
+const UserSchema = new mongoose.Schema(schema);
 
 UserSchema.pre("save", async function (next: HookNextFunction) {
-  const thisObj = this as IUser;
+  const thisObj = this as IUserDocument;
 
   if (this.isModified("password")) {
     try {
@@ -52,7 +67,7 @@ UserSchema.pre("save", async function (next: HookNextFunction) {
 });
 
 UserSchema.methods.isPasswordCorrect = async function (password: string) {
-  const thisObj = this as IUser;
+  const thisObj = this as IUserDocument;
   return await bcrypt.compare(password, thisObj.password);
 };
 

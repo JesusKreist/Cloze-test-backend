@@ -14,6 +14,11 @@ export interface TokenUserObject {
   fullName: string;
 }
 
+type NewUser = Pick<
+  IUser,
+  "username" | "password" | "emailAddress" | "fullName" | "dateOfBirth"
+>;
+
 export const userResolver = {
   Mutation: {
     login: async (
@@ -49,17 +54,22 @@ export const userResolver = {
     },
     createUser: async (
       _root: any,
-      { username, password, fullName, dateOfBirth, emailAddress }: IUser,
+      { username, password, fullName, emailAddress, dateOfBirth }: IUser,
       { mongooseConnection }: ResolverContext
     ) => {
       const User = UserModel(mongooseConnection);
 
-      const newUser: Partial<IUser> = {
+      const userWithSameEmail = await User.findOne({ emailAddress });
+      if (userWithSameEmail) {
+        return new ApolloError("Email already exists.");
+      }
+
+      const newUser: NewUser = {
         username,
         fullName,
-        dateOfBirth,
         password,
         emailAddress,
+        dateOfBirth,
       };
 
       try {
