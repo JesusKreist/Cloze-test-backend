@@ -54,14 +54,23 @@ export const userResolver = {
     },
     createUser: async (
       _root: any,
-      { username, password, fullName, emailAddress, dateOfBirth }: IUser,
+      { username, password, fullName, emailAddress, dateOfBirth }: NewUser,
       { mongooseConnection }: ResolverContext
     ) => {
       const User = UserModel(mongooseConnection);
 
-      const userWithSameEmail = await User.findOne({ emailAddress });
+      const userWithSameEmail = await User.findOne({
+        emailAddressInLowerCase: emailAddress.toLowerCase(),
+      });
       if (userWithSameEmail) {
         return new ApolloError("Email already exists.");
+      }
+
+      const userWithSameUsername = await User.findOne({
+        usernameInLowerCase: username.toLowerCase(),
+      });
+      if (userWithSameUsername) {
+        return new ApolloError("Username already taken.");
       }
 
       const newUser: NewUser = {
