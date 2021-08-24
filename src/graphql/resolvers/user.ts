@@ -57,13 +57,12 @@ export const userResolver = {
       const User = UserModel(mongooseConnection);
 
       const emailAddressInLowerCase = emailAddress.toLowerCase();
-      const usernameInLowerCase = username.toLowerCase();
-
       const userWithSameEmail = await User.findOne({ emailAddressInLowerCase });
       if (userWithSameEmail) {
         return new ApolloError("Email already exists.");
       }
 
+      const usernameInLowerCase = username.toLowerCase();
       const userWithSameUsername = await User.findOne({ usernameInLowerCase });
       if (userWithSameUsername) {
         return new ApolloError("Username already taken.");
