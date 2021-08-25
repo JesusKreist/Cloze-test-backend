@@ -51,7 +51,14 @@ export const userResolver = {
     },
     createUser: async (
       _root: any,
-      { username, password, fullName, emailAddress, dateOfBirth }: NewUser,
+      {
+        username,
+        password,
+        fullName,
+        emailAddress,
+        dateOfBirth,
+        photoUrl,
+      }: NewUser,
       { mongooseConnection }: ResolverContext
     ) => {
       const User = UserModel(mongooseConnection);
@@ -68,6 +75,7 @@ export const userResolver = {
         return new ApolloError("Username already taken.");
       }
 
+      // will break if no photoUrl
       const newUser: NewUser = {
         username,
         fullName,
@@ -76,6 +84,7 @@ export const userResolver = {
         dateOfBirth,
         emailAddressInLowerCase,
         usernameInLowerCase,
+        photoUrl,
       };
 
       try {
