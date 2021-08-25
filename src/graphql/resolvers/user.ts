@@ -7,6 +7,7 @@ import { IUser, UserModel } from "../../database/models/user";
 import { ResolverContext } from "../server";
 import * as jwt from "jsonwebtoken";
 import config from "../../utils/config";
+import faker from "faker";
 
 export interface TokenUserObject {
   username: string;
@@ -57,7 +58,8 @@ export const userResolver = {
         fullName,
         emailAddress,
         dateOfBirth,
-        photoUrl,
+        imageUrl,
+        isSocial,
       }: NewUser,
       { mongooseConnection }: ResolverContext
     ) => {
@@ -69,13 +71,19 @@ export const userResolver = {
         return new ApolloError("Email already exists.");
       }
 
+      if (isSocial) {
+        console.log("This is a social account.");
+        username = emailAddressInLowerCase;
+        password = `${faker.internet.password(10, false, /^[aA-zZ0-9]+$/)}`;
+      }
+
       const usernameInLowerCase = username.toLowerCase();
       const userWithSameUsername = await User.findOne({ usernameInLowerCase });
       if (userWithSameUsername) {
         return new ApolloError("Username already taken.");
       }
 
-      // will break if no photoUrl
+      // will break if no imageUrl
       const newUser: NewUser = {
         username,
         fullName,
@@ -84,7 +92,7 @@ export const userResolver = {
         dateOfBirth,
         emailAddressInLowerCase,
         usernameInLowerCase,
-        photoUrl,
+        imageUrl,
       };
 
       try {

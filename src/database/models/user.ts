@@ -11,8 +11,9 @@ export interface IUser {
   password: string;
   emailAddress: string;
   emailAddressInLowerCase: string;
-  photoUrl?: string;
+  imageUrl?: string;
   isPasswordCorrect(password: string): Promise<boolean>;
+  isSocial?: boolean;
 }
 
 type IUserDocument = mongoose.Document & IUser;
@@ -47,7 +48,7 @@ const schema: mongoose.SchemaDefinition = {
     unique: true,
     required: true,
   },
-  photoUrl: {
+  imageUrl: {
     type: mongoose.Schema.Types.String,
     unique: false,
   },

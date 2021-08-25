@@ -12,7 +12,8 @@ export const user = gql`
       fullName: String!
       emailAddress: EmailAddress!
       dateOfBirth: Date
-      photoUrl: String
+      imageUrl: String
+      isSocial: Boolean
     ): User
     login(
       username: String
@@ -28,7 +29,7 @@ export const user = gql`
     username: String!
     dateOfBirth: Date
     password: String!
-    photoUrl: String
+    imageUrl: String
   }
 
   type Token {
