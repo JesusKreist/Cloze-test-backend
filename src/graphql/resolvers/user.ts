@@ -83,7 +83,6 @@ export const userResolver = {
         return new ApolloError("Username already taken.");
       }
 
-      // will break if no imageUrl
       const newUser: NewUser = {
         username,
         fullName,
