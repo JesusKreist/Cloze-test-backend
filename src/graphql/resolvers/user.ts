@@ -16,30 +16,35 @@ export interface TokenUserObject {
 }
 
 type NewUser = Omit<IUser, "id" | "isPasswordCorrect">;
+type LoginParams = { usernameOrEmail: string; password: string };
 
 export const userResolver = {
   Mutation: {
     login: async (
       _root: any,
-      { username, password, emailAddress }: IUser,
+      { password, usernameOrEmail }: LoginParams,
       { mongooseConnection }: ResolverContext
     ) => {
-      if (!username && !emailAddress) {
+      if (!usernameOrEmail) {
         return new UserInputError("Please enter a username or email address.");
       }
 
       const UserDatabase = UserModel(mongooseConnection);
-      const enteredUser =
-        (await UserDatabase.findOne({ username })) ||
-        (await UserDatabase.findOne({ emailAddress }));
-      const passwordIsCorrect = await enteredUser?.isPasswordCorrect(password);
 
-      if (!enteredUser || !passwordIsCorrect) {
+      const enteredUser = await UserDatabase.findOne({
+        $or: [{ emailAddress: usernameOrEmail }, { username: usernameOrEmail }],
+      });
+      if (!enteredUser) {
+        return new AuthenticationError("Username or password incorrect!");
+      }
+
+      const passwordIsCorrect = await enteredUser?.isPasswordCorrect(password);
+      if (!passwordIsCorrect) {
         return new AuthenticationError("Username or password incorrect!");
       }
 
       const loggedInUser: TokenUserObject = {
-        username,
+        username: enteredUser.username,
         id: enteredUser._id,
         fullName: enteredUser.fullName,
       };

@@ -15,11 +15,7 @@ export const user = gql`
       imageUrl: String
       isSocial: Boolean
     ): User
-    login(
-      username: String
-      emailAddress: EmailAddress
-      password: String!
-    ): Token
+    login(usernameOrEmail: String!, password: String!): Token
     updatePassword(oldPassword: String!, newPassword: String!): User
   }
 
