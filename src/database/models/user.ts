@@ -52,6 +52,10 @@ const schema: mongoose.SchemaDefinition = {
     type: mongoose.Schema.Types.String,
     unique: false,
   },
+  hashSalt: {
+    type: mongoose.Schema.Types.String,
+    unique: true,
+  },
 };
 
 const UserSchema = new mongoose.Schema(schema);
