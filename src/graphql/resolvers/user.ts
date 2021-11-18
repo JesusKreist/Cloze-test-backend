@@ -8,6 +8,7 @@ import { ResolverContext } from "../server";
 import * as jwt from "jsonwebtoken";
 import config from "../../utils/config";
 import faker from "faker";
+import crypto from "crypto";
 
 export interface TokenUserObject {
   username: string;
@@ -97,6 +98,7 @@ export const userResolver = {
         emailAddressInLowerCase,
         usernameInLowerCase,
         imageUrl,
+        jwtSecret: crypto.randomBytes(256).toString("base64"),
       };
 
       try {
