@@ -6,15 +6,14 @@ import {
 import { IUser, UserModel } from "../../../database/models/user";
 import { ResolverContext } from "../../servers";
 import * as jwt from "jsonwebtoken";
-import config from "../../../utils/config";
 import faker from "faker";
 import crypto from "crypto";
 
-export interface TokenUserObject {
+export type TokenUserObject = {
   username: string;
   id: string;
   fullName: string;
-}
+};
 
 type NewUser = Omit<IUser, "id" | "isPasswordCorrect">;
 type LoginParams = { usernameOrEmail: string; password: string };
@@ -51,11 +50,20 @@ export const userResolver = {
       };
       // TODO Create two tokens, access and refresh tokens
 
-      const jwtToken = jwt.sign(loggedInUser, enteredUser.jwtSecret, {
-        expiresIn: config.JWT_EXPIRES_IN,
-      });
+      const accessToken = jwt.sign(
+        loggedInUser,
+        enteredUser.accessTokenSecret,
+        {
+          expiresIn: "15s",
+        }
+      );
 
-      return { value: jwtToken };
+      const refreshToken = jwt.sign(
+        loggedInUser,
+        enteredUser.refreshTokenSecret
+      );
+
+      return { accessToken, refreshToken };
     },
     createUser: async (
       _root: any,
@@ -99,7 +107,8 @@ export const userResolver = {
         emailAddressInLowerCase,
         usernameInLowerCase,
         imageUrl,
-        jwtSecret: crypto.randomBytes(256).toString("base64"),
+        accessTokenSecret: crypto.randomBytes(256).toString("base64"),
+        refreshTokenSecret: crypto.randomBytes(256).toString("base64"),
       };
 
       try {

@@ -14,7 +14,8 @@ export interface IUser {
   imageUrl?: string;
   isPasswordCorrect(password: string): Promise<boolean>;
   isSocial?: boolean;
-  jwtSecret: string;
+  accessTokenSecret: string;
+  refreshTokenSecret: string;
 }
 
 type IUserDocument = mongoose.Document & IUser;
@@ -53,7 +54,12 @@ const schema: mongoose.SchemaDefinition = {
     type: mongoose.Schema.Types.String,
     unique: false,
   },
-  jwtSecret: {
+  accessTokenSecret: {
+    type: mongoose.Schema.Types.String,
+    unique: true,
+    required: true,
+  },
+  refreshTokenSecret: {
     type: mongoose.Schema.Types.String,
     unique: true,
     required: true,

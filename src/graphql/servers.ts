@@ -4,7 +4,7 @@ import { typeDefs } from "./schema/index";
 import { CustomApolloContext } from "../handler";
 import mongoose from "mongoose";
 import { APIGatewayEvent } from "aws-lambda";
-import { TokenUserObject } from "./resolvers/user";
+import { TokenUserObject } from "./resolvers/authResolvers/user";
 import { getCurrentUser } from "./init/getCurrentUser";
 import { authServerTypeDefs } from "./schema/authSchema";
 import { authServerResolvers } from "./resolvers/authResolvers";

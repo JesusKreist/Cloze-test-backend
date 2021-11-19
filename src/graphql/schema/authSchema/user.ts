@@ -15,7 +15,7 @@ export const user = gql`
       imageUrl: String
       isSocial: Boolean
     ): User
-    login(usernameOrEmail: String!, password: String!): Token
+    login(usernameOrEmail: String!, password: String!): Tokens
     updatePassword(oldPassword: String!, newPassword: String!): User
   }
 
@@ -26,9 +26,12 @@ export const user = gql`
     dateOfBirth: Date
     password: String!
     imageUrl: String
+    accessTokenSecret: String!
+    refreshTokenSecret: String!
   }
 
-  type Token {
-    value: String!
+  type Tokens {
+    accessToken: String!
+    refreshToken: String!
   }
 `;

@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import { UserModel } from "../../database/models/user";
 import config from "../../utils/config";
 import { logger } from "../../utils/logger";
-import { TokenUserObject } from "../resolvers/user";
+import { TokenUserObject } from "../resolvers/authResolvers/user";
 
 export const getCurrentUser = async (
   authorizationKey: string | undefined,
