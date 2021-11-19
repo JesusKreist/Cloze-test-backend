@@ -18,6 +18,19 @@ functions:
           method: post
           cors: true
           integration: lambda-proxy
+  auth:
+    handler: src/handler.authenticationHandler
+    events:
+      - http:
+          path: auth
+          method: get
+          cors: true
+          integration: lambda-proxy
+      - http:
+          path: auth
+          method: post
+          cors: true
+          integration: lambda-proxy
 plugins:
   - serverless-webpack
   - serverless-offline

@@ -3,10 +3,10 @@ import {
   AuthenticationError,
   UserInputError,
 } from "apollo-server-lambda";
-import { IUser, UserModel } from "../../database/models/user";
-import { ResolverContext } from "../servers";
+import { IUser, UserModel } from "../../../database/models/user";
+import { ResolverContext } from "../../servers";
 import * as jwt from "jsonwebtoken";
-import config from "../../utils/config";
+import config from "../../../utils/config";
 import faker from "faker";
 import crypto from "crypto";
 

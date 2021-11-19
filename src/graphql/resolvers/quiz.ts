@@ -1,6 +1,6 @@
 import { UserInputError } from "apollo-server-lambda";
 import { Quiz } from "../../database/models/quiz";
-import { ResolverContext } from "../server";
+import { ResolverContext } from "../servers";
 import { QuizModel } from "../../database/models/quiz";
 import {
   gradeUserAnswer,
