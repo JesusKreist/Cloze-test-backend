@@ -11,7 +11,11 @@ export const getOneClozeTest = (
   try {
     return QuizDatabase.findById(quizId);
   } catch (error) {
-    throw new UserInputError(error.message, { invalidQuizId: quizId });
+    if (error instanceof Error) {
+      throw new UserInputError(error.message, { invalidQuizId: quizId });
+    } else {
+      throw new Error("An error occured when finding the quiz.");
+    }
   }
 };
 
@@ -21,6 +25,10 @@ export const getAllClozeTests = (mongooseConnection: mongoose.Connection) => {
   try {
     return QuizDatabase.find({});
   } catch (error) {
-    throw new UserInputError(error.message);
+    if (error instanceof Error) {
+      throw new UserInputError(error.message);
+    } else {
+      throw new Error("An error occured when finding all quizzes.");
+    }
   }
 };

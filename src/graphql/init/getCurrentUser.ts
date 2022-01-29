@@ -2,7 +2,6 @@ import * as jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import { UserModel } from "../../database/models/user";
 import config from "../../utils/config";
-import { logger } from "../../utils/logger";
 import { TokenUserObject } from "../resolvers/authResolvers/user";
 
 export const getCurrentUser = async (
@@ -23,19 +22,21 @@ export const getCurrentUser = async (
     try {
       verifiedToken = jwt.verify(authToken, config.JWT_SECRET) as any;
     } catch (error) {
-      logger.error("An error occured while decoding the token", { ...error });
+      console.error("An error occured while decoding the token");
+      console.error(error);
     }
   }
 
   if (verifiedToken) {
     decodedToken = verifiedToken as TokenUserObject;
-    logger.info("Successfully decoded the token", verifiedToken);
+    console.info("Successfully decoded the token");
+    console.info(verifiedToken);
 
     try {
       await User.findById(decodedToken.id);
       return decodedToken;
     } catch (error) {
-      logger.info("Unable to find user");
+      console.info("Unable to find user");
       return null;
     }
   }

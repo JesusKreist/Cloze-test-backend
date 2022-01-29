@@ -16,6 +16,7 @@ export interface IUser {
   isSocial?: boolean;
   accessTokenSecret: string;
   refreshTokenSecret: string;
+  refreshTokens: string[];
 }
 
 type IUserDocument = mongoose.Document & IUser;
@@ -64,6 +65,13 @@ const schema: mongoose.SchemaDefinition = {
     unique: true,
     required: true,
   },
+  refreshTokens: [
+    {
+      type: mongoose.Schema.Types.String,
+      unique: true,
+      required: true,
+    },
+  ],
 };
 
 const UserSchema = new mongoose.Schema(schema);
@@ -75,7 +83,22 @@ UserSchema.pre<IUserDocument>("save", async function (next: HookNextFunction) {
       this.password = await bcrypt.hash(this.password, saltRounds);
       return next();
     } catch (e) {
-      return next(e);
+      if (e instanceof mongoose.Error) {
+        return next(e);
+      }
+    }
+  }
+});
+
+UserSchema.pre<IUserDocument>("save", async function (next: HookNextFunction) {
+  if (this.isNew) {
+    try {
+      this.refreshTokens = [];
+      return next();
+    } catch (e) {
+      if (e instanceof mongoose.Error) {
+        return next(e);
+      }
     }
   }
 });

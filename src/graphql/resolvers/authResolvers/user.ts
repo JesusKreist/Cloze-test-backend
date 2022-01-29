@@ -15,7 +15,7 @@ export type TokenUserObject = {
   fullName: string;
 };
 
-type NewUser = Omit<IUser, "id" | "isPasswordCorrect">;
+type NewUser = Omit<IUser, "id" | "isPasswordCorrect" | "refreshTokens">;
 type LoginParams = { usernameOrEmail: string; password: string };
 
 export const userResolver = {
@@ -115,7 +115,11 @@ export const userResolver = {
         const newlyCreatedUser = await User.create(newUser);
         return newlyCreatedUser;
       } catch (error) {
-        throw new UserInputError(error.message, { invalidArgs: newUser });
+        if (error instanceof Error) {
+          throw new UserInputError(error.message, { invalidArgs: newUser });
+        } else {
+          throw new Error("An error occured when creating a new user");
+        }
       }
     },
     updatePassword: async (
@@ -150,7 +154,13 @@ export const userResolver = {
         enteredUser.password = newPassword;
         return enteredUser.save();
       } catch (error) {
-        throw new ApolloError("An error occured!", { ...error });
+        if (error instanceof Error) {
+          throw new ApolloError("An error occured!", error.message);
+        } else {
+          throw new ApolloError(
+            "An error occured when updating the password. "
+          );
+        }
       }
     },
   },

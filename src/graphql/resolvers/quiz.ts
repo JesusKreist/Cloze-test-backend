@@ -7,6 +7,7 @@ import {
   UserAnswerRequest,
 } from "../../quiz/gradeUserAnswers";
 import { getAllClozeTests, getOneClozeTest } from "../../quiz/getClozeTest";
+import { createQuiz } from "../../quiz/createQuiz";
 
 export const quizResolver = {
   Mutation: {
@@ -17,14 +18,18 @@ export const quizResolver = {
     ) => {
       // todo protect this route with admin administration
       const QuizModelConnection = QuizModel(mongooseConnection);
+      const createdQuiz = createQuiz(text);
 
-      const newQuiz = { text, title };
-
+      const newQuiz = { text, title, createdQuiz };
       try {
         const newlyCreatedQuiz = await QuizModelConnection.create(newQuiz);
         return newlyCreatedQuiz;
       } catch (error) {
-        throw new UserInputError(error.message, { invalidArgs: newQuiz });
+        if (error instanceof Error) {
+          throw new UserInputError(error.message, { invalidArgs: newQuiz });
+        } else {
+          throw new Error("An error occured when creating a quiz.");
+        }
       }
     },
     checkUserAnswers: async (

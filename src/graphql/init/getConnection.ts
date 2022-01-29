@@ -1,16 +1,16 @@
 import { ApolloError } from "apollo-server-lambda";
-import { logger } from "../../utils/logger";
 import config from "../../utils/config";
 import mongoose from "mongoose";
 
 // mongoose.set("debug", true);
-let cachedDatabaseConnection: mongoose.Connection | null = null;
 
 export const getConnection = async (): Promise<mongoose.Connection> => {
+  let cachedDatabaseConnection: mongoose.Connection | null = null;
+
   if (cachedDatabaseConnection === null) {
-    logger.debug("Trying to connect to database", {
-      databaseUrl: config.MONGODB_URI,
-    });
+    console.debug("Trying to connect to database");
+    console.debug({ databaseUrl: config.MONGODB_URI });
+
     try {
       cachedDatabaseConnection = await mongoose.createConnection(
         config.MONGODB_URI,
@@ -23,13 +23,16 @@ export const getConnection = async (): Promise<mongoose.Connection> => {
           useFindAndModify: false,
         }
       );
-      logger.info("Successfully connected to database");
+      console.info("Successfully connected to database");
     } catch (error) {
-      logger.error("Could not connect to database", { ...error });
-      throw new ApolloError("Could not connect to database", error);
+      if (error instanceof Error) {
+        console.error("Could not connect to database", { ...error });
+        throw new ApolloError("Could not connect to database", error.message);
+      }
     }
   } else {
-    logger.info("Using cached database instance");
+    console.info("Using cached database instance");
   }
-  return cachedDatabaseConnection;
+
+  return cachedDatabaseConnection as mongoose.Connection;
 };

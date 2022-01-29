@@ -1,5 +1,5 @@
-import mongoose, { HookNextFunction } from "mongoose";
-import { createQuiz, ProcessedWord } from "../../quiz/createQuiz";
+import mongoose from "mongoose";
+import { ProcessedWord } from "../../quiz/createQuiz";
 
 export interface Quiz extends mongoose.Document {
   title: string;
@@ -58,21 +58,6 @@ const schema: mongoose.SchemaDefinition = {
 };
 
 const QuizSchema: mongoose.Schema = new mongoose.Schema(schema);
-QuizSchema.pre("save", async function (next: HookNextFunction) {
-  const thisObj = this as Quiz;
-
-  if (thisObj.isNew) {
-    try {
-      thisObj.createdQuiz = createQuiz(thisObj.text);
-      return next();
-    } catch (error) {
-      console.log(error);
-      return next(error);
-    }
-  }
-
-  return next();
-});
 
 export const QuizModel = (databaseConnection: mongoose.Connection) => {
   return databaseConnection.model(
