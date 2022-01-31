@@ -8,6 +8,7 @@ import { ResolverContext } from "../../servers";
 import * as jwt from "jsonwebtoken";
 import faker from "faker";
 import crypto from "crypto";
+import { OAuth2Client } from "google-auth-library";
 
 export type TokenUserObject = {
   username: string;
@@ -35,6 +36,10 @@ export type DecodedGoogleToken = {
 
 type NewUser = Omit<IUser, "id" | "isPasswordCorrect" | "refreshTokens">;
 type LoginParams = { usernameOrEmail: string; password: string };
+
+const GOOGLE_CLIENT_ID =
+  "6555442020-tan1qs8oit4dfrquajmn3a9s96f13ggr.apps.googleusercontent.com";
+const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 export const userResolver = {
   Mutation: {
@@ -145,11 +150,31 @@ export const userResolver = {
       { googleTokenId }: { googleTokenId: string },
       { mongooseConnection }: ResolverContext
     ) => {
-      console.log(googleTokenId);
+      const verify = async () => {
+        try {
+          const ticket = await googleClient.verifyIdToken({
+            idToken: googleTokenId,
+            audience: GOOGLE_CLIENT_ID,
+          });
 
-      const isValid = jwt.verify(googleTokenId);
-      const decodedGoogleToken = jwt.decode(googleTokenId);
-      console.log(decodedGoogleToken);
+          console.log(ticket);
+
+          const payload = ticket.getPayload();
+          if (payload) {
+            const userid = payload["sub"];
+            console.log(userid);
+          }
+        } catch (error) {
+          if (error instanceof Error) {
+            console.error(error.message);
+          }
+        }
+      };
+
+      verify();
+
+      // const decodedGoogleToken = jwt.decode(googleTokenId);
+      // console.log(decodedGoogleToken);
       mongooseConnection;
     },
     updatePassword: async (

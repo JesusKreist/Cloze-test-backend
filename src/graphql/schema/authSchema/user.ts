@@ -17,6 +17,7 @@ export const user = gql`
     ): User
     login(usernameOrEmail: String!, password: String!): Tokens
     updatePassword(oldPassword: String!, newPassword: String!): User
+    googleSocialLogin(googleTokenId: String!): User
   }
 
   type User {
