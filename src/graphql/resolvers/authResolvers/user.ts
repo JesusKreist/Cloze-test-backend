@@ -15,6 +15,24 @@ export type TokenUserObject = {
   fullName: string;
 };
 
+export type DecodedGoogleToken = {
+  iss: string;
+  azp: string;
+  aud: string;
+  sub: string;
+  email: string;
+  email_verified: boolean;
+  at_hash: string;
+  name: string;
+  picture: string;
+  given_name: string;
+  family_name: string;
+  locale: string;
+  iat: number;
+  exp: number;
+  jti: string;
+};
+
 type NewUser = Omit<IUser, "id" | "isPasswordCorrect" | "refreshTokens">;
 type LoginParams = { usernameOrEmail: string; password: string };
 
@@ -121,6 +139,18 @@ export const userResolver = {
           throw new Error("An error occured when creating a new user");
         }
       }
+    },
+    googleSocialLogin: async (
+      _root: any,
+      { googleTokenId }: { googleTokenId: string },
+      { mongooseConnection }: ResolverContext
+    ) => {
+      console.log(googleTokenId);
+
+      const isValid = jwt.verify(googleTokenId);
+      const decodedGoogleToken = jwt.decode(googleTokenId);
+      console.log(decodedGoogleToken);
+      mongooseConnection;
     },
     updatePassword: async (
       _root: any,
